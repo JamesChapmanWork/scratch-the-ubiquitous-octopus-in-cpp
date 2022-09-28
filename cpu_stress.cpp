@@ -1,35 +1,45 @@
+#include <iostream>
 #include <thread>
 #include <vector>
 
-constexpr int threadsToSpawn = 8;
-
 int main()
 {
+    const auto processorCount = std::thread::hardware_concurrency();
+    std::cout << processorCount << " CPU cores detected\n\n";
+
     std::vector<std::thread> threadVector;
 
     auto calculatePrimes = []()
     {
+        bool isPrime{ false };
         std::vector<int> primeNumbers;
-        for (int i = 1; i < INT32_MAX; ++i)
+        for (int i = 3; i < INT32_MAX; ++i)
         {
-            for (int j = 1; j < i / 2; ++j)
+            isPrime = true;
+            for (int j = 3; j < i / 2; ++j)
             {
-                if (j % 2 == 0)
+                if (i % 2 == 0)
                 {
-                    ++j;
+                    isPrime = false;
+                    continue;
                 }
                 if (i % j == 0)
                 {
-                    break;
+                    isPrime = false;
+                    continue;
                 }
             }
-            primeNumbers.push_back(i);
+            if (isPrime)
+            {
+                primeNumbers.push_back(i);
+            }
         }
     };
 
     // Start 10 threads with a named and better expressed lambda function.
-    for (int i = 0; i < threadsToSpawn; i++)
+    for (int t = 0; t < processorCount; t++)
     {
+        std::cout << "Spawning thread " << t + 1 << "...\n";
         threadVector.push_back(std::thread(calculatePrimes));
     }
 
