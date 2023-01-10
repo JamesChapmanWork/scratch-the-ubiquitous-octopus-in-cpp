@@ -17,7 +17,7 @@ _NT_SYMBOL_PATH=CACHE*C:\SymbolCache;C:\Symbols;SRV*https://internal-server/symb
 
 ### Analyzing crash dumps
 
-Open `windbg` and load the dump. If the environment variables (configured above) are correct, windbg will automatically download symbols and find the corresponding source code. The source code needs to match what was built, this might mean checking out the revision that the crashed build was built from.
+Open `windbg` and load the dump. The source code needs to match what was built, this might mean checking out the revision that the crashed build was built from.
 
 run `!analyze -v` to see where the crash occured.
 
